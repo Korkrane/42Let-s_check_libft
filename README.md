@@ -1,1 +1,1 @@
-# 42Let-s_check_libft
+# 42Lets_check_libft
