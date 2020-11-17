@@ -38,18 +38,13 @@ printf " | |__|  __/ |_  \__ \ | (__| | | |  __/ (__|   <  | | | |_) |  _| |_ | 
 printf " |_____\___|\__| |___/  \___|_| |_|\___|\___|_|\_\ |_|_|_.__/|_|  \__(_)__,_|\n\n"
 printf " ============================================================================\n"
 printf ${WHITE}"\n"
-#norminette_path()
-#{
+printf"If it fails to compile, interrupt the script and make sure to run your Makefile first\n\n"
 read -p "Do you run the test from Guacamole/42 Campus [Y/N]?" AT_42
 if [[ "${AT42}" == "Y" ]];then
-	NORMINETTE_PATH=/usr/share/norminette/norminette.rb
+	NORMINETTE_PATH=norminette
 else
 	NORMINETTE_PATH=~/.norminette/norminette.rb
-#else
-#	norminette_path
 fi
-#}
-
 #Check for code owner / Makefile presence / and libft.h presence
 
 printf ${BOLD}${BLUE}"\n ============================================================================\n"
@@ -167,6 +162,7 @@ BONUS_0=(
 	'ft_lstsize.c'
 )
 
+mkdir -p ./output/user
 #Verify if functions respect the norm, compile and pass the tests
 function_breaker()
 {
@@ -178,12 +174,12 @@ function_breaker()
 	printf ${color}"\033[31G${part}\n"
 	for val in "${arr[@]}"; do
 		printf ${color}"\033[4G${val}"
-		if [[ -z $(gcc -Wextra -Werror -Wall ./srcs/${val} ./tests_functions/${val} libft.a 2>&1 | head -1) ]]; then
+		if [[ -z $(gcc -Wextra -Werror -Wall ../srcs/${val} ../tests_functions/${val} ../libft.a 2>&1 | head -1) ]]; then
 			printf ${GREEN}"\033[24G[OK]"
 		else
 			printf ${RED}"\033[24G[KO]"
 		fi
-		if [[ -z $(${NORMINETTE_PATH} ./srcs/${val} | grep "Error\|Warning") ]]; then
+		if [[ -z $(${NORMINETTE_PATH} ../srcs/${val} | grep "Error\|Warning") ]]; then
 			printf ${GREEN}"\033[40G[OK]"
 		else
 			printf ${RED}"\033[40G[KO]"
@@ -193,7 +189,7 @@ function_breaker()
 		if test -f ./a.out; then
 			./a.out > ./output/user/${val}
 			while [ $i -le  70 ]; do
-				if [[ -z $(diff ./output/expected/${val} ./output/user/${val} | grep ${test_num}c${test_num}) ]]; then
+				if [[ -z $(diff ../output/expected/${val} ../output/user/${val} | grep ${test_num}c${test_num}) ]]; then
 					printf ${GREEN}"\033[${i}G✔"
 				else
 					printf ${RED}"\033[${i}G✖"
