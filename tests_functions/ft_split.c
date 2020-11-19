@@ -14,7 +14,7 @@ int main(void)
 	char *test7 = "1 + 1 = 2 what is the operator :v ?";
 	char *test8 = "Not a good letter";
 	char *test9 = "123a465";
-	char *test10 = ". / . ";
+	char *test10 = NULL;
 
 	char c1 = ' ';
 	char c2 = 'e';
@@ -25,7 +25,7 @@ int main(void)
 	char c7 = '+';
 	char c8 = 'o';
 	char c9 = 'a';
-	char c10 = ' ';
+	char c10 = 'x';
 
 	char **result1 = ft_split(test1, c1);
 	char **result2 = ft_split(test2, c2);
@@ -85,9 +85,10 @@ int main(void)
 	printf("\n");
 	//TEST10
 	i = 0;
-	while(result10[i])
-		printf("%s|", result10[i++]);
-	printf("\n");
+	if(result10)
+			printf("you didn't try with s=NULL");
+	else
+		printf("ok\n");
 	
 	free(result1);
 	free(result2);
@@ -98,6 +99,7 @@ int main(void)
 	free(result7);
 	free(result8);
 	free(result9);
-	free(result10);
+	if (result10)
+		free(result10);
 	return (0);
 }
