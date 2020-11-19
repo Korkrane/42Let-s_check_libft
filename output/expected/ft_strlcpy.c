@@ -7,4 +7,4 @@
 8 1te-d
 17 
 4 007J
-2 What day is it!
+2 What day is it?

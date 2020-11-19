@@ -28,7 +28,7 @@ do
 done
 LIB_NAME=$(grep "libft.a" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w libft.a)
 ALL_RULE=$(grep "all" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w all)
-NAME_RULE=$(grep "\${NAME}" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w \${NAME})
+NAME_RULE=$(grep "\$(NAME)" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w "\$(NAME)")
 CLEAN_RULE=$(grep "clean" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w clean)
 FCLEAN_RULE=$(grep "fclean" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w fclean)
 RE_RULE=$(grep "re" ${MAKEFILE_PATH} | tr -d ' ' | tr -d '\t' | cut -d ':' -f 1 | grep -w re)
@@ -58,7 +58,7 @@ printf " =======================================================================
 printf ${WHITE}"\033[4GCode owner\033[30GMakefile\033[56GHeader\n"
 #Check the username in every C files, if username not unique, check manually with the command below (paste only from for to done. Some students are even able to copy/paste header :v
 cd ..
-if [[ "$(for i in srcs/*.c; do sed -n '6p' $i | tail -1 | cut -f5 -d ' '; done | uniq | wc -l | sed -e 's/^[ \t]*//')" == "1" ]]; then
+if [[ "$(for i in *.c; do sed -n '6p' $i | tail -1 | cut -f5 -d ' '; done | uniq | wc -l | sed -e 's/^[ \t]*//')" == "1" ]]; then
 	printf ${GREEN}"\033[4G${OWNER}"
 else
 	printf ${RED}"\033[4GMultiple names ! ✖"
@@ -79,8 +79,8 @@ cd 42Lets_check_libft
 printf ${BOLD}${BLUE}"\n ============================================================================\n"
 printf " *				MAKEFILE CHECK				    *\n"
 printf " ============================================================================\n\n"
-printf ${WHITE}"\033[4G\${NAME}\033[17Gall\033[30Gclean\033[43Gfclean\033[56Gre\033[69Glibft.a\n"
-if [[ "${NAME_RULE}" == *"\${NAME}"* ]]; then 
+printf ${WHITE}"\033[4G\$(NAME)\033[17Gall\033[30Gclean\033[43Gfclean\033[56Gre\033[69Glibft.a\n"
+if [[ "${NAME_RULE}" == *"\$(NAME)"* ]]; then 
 	printf ${GREEN}"\033[4G[OK]"
 else
 	printf ${RED}"\033[4G[KO]"
@@ -180,32 +180,36 @@ function_breaker()
 	printf ${color}"\033[31G${part}\n"
 	for val in "${arr[@]}"; do
 		printf ${color}"\033[4G${val}"
-		if [[ -z $(gcc -Wextra -Werror -Wall ../srcs/${val} ./tests_functions/${val} ../libft.a 2>&1 | head -1) ]]; then
+		if [[ -z $(gcc -Wextra -Werror -Wall ../${val} ./tests_functions/${val} ../libft.a 2>&1 | head -1) ]]; then
 			printf ${GREEN}"\033[24G[OK]"
 		else
 			printf ${RED}"\033[24G[KO]"
 		fi
-		if [[ -z $(${NORMINETTE_PATH} ../srcs/${val} | grep "Error\|Warning") ]]; then
+		if [[ -z $(${NORMINETTE_PATH} ../${val} | grep "Error\|Warning") ]]; then
 			printf ${GREEN}"\033[40G[OK]"
 		else
 			printf ${RED}"\033[40G[KO]"
 		fi
 		i=52
 		test_num=1
-		if test -f ./a.out; then
-			./a.out > ./output/user/${val}
-			while [ $i -le  70 ]; do
-				if [[ -z $(diff ./output/expected/${val} ./output/user/${val} | grep ${test_num}c${test_num}) ]]; then
-					printf ${GREEN}"\033[${i}G✔"
-				else
-					printf ${RED}"\033[${i}G✖"
-				fi
-				test_num=$(($test_num+1))
-				i=$(($i+2))
-			done
+		if [[ ${val} == "ft_lstclear.c" || ${val} == "ft_lstdelone.c" || ${val} == "ft_lstiter.c" || ${val} == "ft_lstmap.c" ]]; then
+			printf ${WHITE}"\033[${i}GNo tests atm"
 		else
-			printf ${RED}"\033[${i}GCompil error\n"
-			continue
+			if test -f ./a.out; then
+				./a.out > ./output/user/${val}
+				while [ $i -le  70 ]; do
+					if [[ -z $(diff ./output/expected/${val} ./output/user/${val} | grep ${test_num}c${test_num}) ]]; then
+						printf ${GREEN}"\033[${i}G✔"
+					else
+						printf ${RED}"\033[${i}G✖"
+					fi
+					test_num=$(($test_num+1))
+					i=$(($i+2))
+				done
+			else
+				printf ${RED}"\033[${i}GCompil error\n"
+				continue
+			fi
 		fi
 		printf "\n"
 	done

@@ -7,4 +7,4 @@ only|numbers|?|
 1 | 1 = 2 what is the operator :v ?|
 N|t a g|d letter|
 123|465|
-ddd
+.|/|.|

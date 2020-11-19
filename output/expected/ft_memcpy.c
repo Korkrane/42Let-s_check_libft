@@ -7,4 +7,4 @@ de8ete the following number : 0123456789
 124456Quarante-deux123456
 222H3LP M3E ! #42
 00-H4C3R?007
-errWhat day is it?
+What day is it?
